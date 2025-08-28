@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yuancarlos - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            overflow-x: hidden;
+        }
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            /* Updated fading background gradient: Deep Blue to Violet */
+            background: linear-gradient(to bottom right, #2C3E50, #4A235A); 
+            display: flex; /* Use flex to center content */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            padding-top: 5rem; /* Adjust padding to not overlap with fixed header */
+            padding-bottom: 5rem;
+        }
+        #threejs-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Place canvas below content */
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2; /* Place content above canvas */
+            color: white;
+            text-align: center;
+        }
+        .social-link {
+            transition: transform 0.2s ease-in-out;
+        }
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Ensure responsive font sizes */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 3rem;
+            }
+            .sub-title {
+                font-size: 1.2rem;
+            }
+        } 
+
+        /* Custom styles for carousel */
+        .project-display {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .project-display.active {
+            opacity: 1;
+        }
+        .pagination-dot {
+            background-color: #d1d5db; /* Light gray */
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #6b7280; /* Darker gray */
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+    <!-- Header -->
+    <header class="text-gray-900 bg-gray-100 sticky top-0 z-50 shadow-lg">
+        <nav class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <a href="homepage.html" class="text-xl font-bold tracking-widest uppercase">carlos.</a>
+            <div class="mt-4 sm:mt-0 flex space-x-6 sm:space-x-8 text-sm font-medium">
+                <a href="homepage.html" class="hover:text-gray-600 transition duration-300 ease-in-out">Home</a>
+                <a href="about.html" class="hover:text-gray-600 transition duration-300 ease-in-out">About</a>
+                <a href="projects.html" class="hover:text-gray-600 transition duration-300 ease-in-out">Projects</a>
+                <a href="contact.html" class="hover:text-gray-600 transition duration-300 ease-in-out">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <canvas id="threejs-canvas"></canvas>
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between hero-content">
+            <div class="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0">
+                <p class="text-lg mb-2">Hello !</p>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
+                    I am Yuan Carlos
+                </h1>
+                <p class="mt-4 max-w-lg mx-auto lg:mx-0">
+                    I'm a student at De La Salle University, my expertise lies in creating web and mobile applications, shaped by both coursework and real-world projects.
+                </p>
+                <div class="mt-8 flex justify-center lg:justify-start space-x-4">
+                    <a href="https://www.facebook.com/yuan.patawaran/" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                        <!-- Facebook Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.873V15h-2.95v-3h2.95V9.75c0-2.905 1.76-4.5 4.363-4.5 1.258 0 2.37.094 2.69.136v2.922h-1.74c-1.37 0-1.638.65-1.638 1.61v2.162h3.256l-.504 3.003h-2.752v7.193C18.343 21.128 22 16.991 22 12z"></path></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/yuan-carlos-patawaran-bba9a12b3/" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                        <!-- LinkedIn Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.769 0-.969.784-1.749 1.75-1.749s1.75.78 1.75 1.749c0 .979-.784 1.769-1.75 1.769zm13.5 12.268h-3v-5.604c0-3.368-4.01-3.113-4.01 0v5.604h-3v-11h3v1.765c1.396-2.586 7.01-2.61 7.01 2.928v6.307z"></path></svg>
+                    </a>
+                    <a href="https://www.instagram.com/yuancarloss/" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                        <!-- Instagram Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm6.657 2.146c.928 0 1.688.76 1.688 1.688 0 .928-.76 1.688-1.688 1.688-.928 0-1.688-.76-1.688-1.688 0-.928.76-1.688 1.688-1.688zM12 7c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 2c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"></path></svg>
+                    </a>
+
+                    <a href="https://github.com/yuancarlosss" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                        <!-- GitHub Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.167 6.83 9.488.5.09.682-.218.682-.483 0-.237-.009-.868-.014-1.7-2.782.605-3.37-1.34-3.37-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.007.07 1.531 1.032 1.531 1.032.892 1.528 2.341 1.087 2.91.832.09-.64.35-1.087.636-1.334-2.22-.251-4.555-1.11-4.555-4.943 0-1.09.39-1.984 1.029-2.675-.103-.252-.446-1.266.098-2.64c0 0 .84-.268 2.75 1.022A9.585 9.585 0 0112 6.814c.85.004 1.7.11 2.504.324 1.909-1.29 2.747-1.022 2.747-1.022.546 1.374.202 2.388.099 2.64.64.691 1.028 1.585 1.028 2.675 0 3.842-2.335 4.689-4.564 4.935.359.307.68.914.68 1.846 0 1.334-.012 2.41-.012 2.73 0 .265.18.577.688.484C19.137 20.163 22 16.416 22 12 22 6.477 17.523 2 12 2z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Projects Section -->
+    <section id="featured-projects" class="container mx-auto px-4 py-16 md:py-24">
+        <div class="text-center mb-12">
+            <p class="text-sm uppercase tracking-wide font-semibold text-gray-500">My Latest Work</p>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2 text-gray-700">Featured Projects</h2>
+        </div>
+
+        <div class="relative flex items-center justify-center">
+            <!-- Previous Button -->
+            <button id="prevProjectBtn" class="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300 focus:outline-none hidden lg:block">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+
+            <div id="project-carousel" class="flex flex-col lg:flex-row items-center lg:items-start space-y-12 lg:space-y-0 lg:space-x-12 w-full max-w-4xl overflow-hidden">
+                <!-- Project content will be loaded here by JavaScript -->
+                <div class="lg:w-1/3 flex-shrink-0 relative">
+                    <img id="project-image" src="https://placehold.co/400x400/cccccc/333333?text=Featured+Projects" alt="Featured Project Image" class="rounded-xl shadow-2xl">
+                    <div class="absolute bottom-4 right-4 p-2 bg-white rounded-full shadow-lg cursor-pointer">
+                        <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4zM12 9c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                    </div>
+                </div>
+                <div class="lg:w-2/3 text-center lg:text-left project-display" id="project-details-container">
+                    <p class="text-sm uppercase tracking-wide font-semibold text-gray-500" id="project-category">Project Category</p>
+                    <h3 class="text-3xl md:text-4xl font-bold mt-2 text-gray-700" id="project-title">Project Title</h3>
+                    <p class="text-gray-500 text-sm mt-1 mb-4" id="project-year">Year</p>
+                    <p class="mt-6 text-gray-600 leading-relaxed" id="project-description">
+                        This is a description of the featured project. It will dynamically change based on the active project.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2" id="project-technologies">
+                        <!-- Technologies will be added here by JavaScript -->
+                    </div>
+                    <div class="mt-6 flex justify-start items-center space-x-4">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-300" id="project-view-link">View Project &rarr;</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 transition-colors duration-300" id="project-github-link">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.167 6.83 9.488.5.09.682-.218.682-.483 0-.237-.009-.868-.014-1.7-2.782.605-3.37-1.34-3.37-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.007.07 1.531 1.032 1.531 1.032.892 1.528 2.341 1.087 2.91.832.09-.64.35-1.087.636-1.334-2.22-.251-4.555-1.11-4.555-4.943 0-1.09.39-1.984 1.029-2.675-.103-.252-.446-1.266.098-2.64c0 0 .84-.268 2.75 1.022A9.585 9.585 0 0112 6.814c.85.004 1.7.11 2.504.324 1.909-1.29 2.747-1.022 2.747-1.022.546 1.374.202 2.388.099 2.64.64.691 1.028 1.585 1.028 2.675 0 3.842-2.335 4.689-4.564 4.935.359.307.68.914.68 1.846 0 1.334-.012 2.41-.012 2.73 0 .265.18.577.688.484C19.137 20.163 22 16.416 22 12 22 6.477 17.523 2 12 2z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Button -->
+            <button id="nextProjectBtn" class="absolute right-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300 focus:outline-none hidden lg:block">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+
+        <!-- Pagination Dots -->
+        <div id="project-pagination" class="flex justify-center space-x-2 mt-8">
+            <!-- Dots will be generated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="container mx-auto px-4 py-16 md:py-24">
+        <div class="text-center mb-12">
+            <p class="text-sm uppercase tracking-wide font-semibold text-gray-500">My Education</p>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2 text-gray-700">Educational Background</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Education Card 1 -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800">Bachelor of Science in Information Technology</h3>
+                <p class="text-gray-600 mt-2">De La Salle University - Manila</p>
+                <p class="text-sm text-gray-500 mt-1">2021 - 2026</p>
+                <ul class="list-disc list-inside mt-4 text-gray-600">
+                    <li>Developed a capstone on IOT-Driven web applications.</li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800">STEM Strand</h3>
+                <p class="text-gray-600 mt-2">Chevalier School - Angeles City </p>
+                <p class="text-sm text-gray-500 mt-1">2015 - 2021</p>
+                <ul class="list-disc list-inside mt-4 text-gray-600">
+                    <li>Student Supreme Government - Committee</li>
+                    <li>Best in Basic Calculus (2021)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 text-center">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Yuan Patawaran. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        window.onload = function() {
+            // Three.js background animation setup
+            const canvas = document.getElementById('threejs-canvas');
+            const heroSection = document.querySelector('.hero-section');
+
+            let scene, camera, renderer, spheres = [];
+            let mouseX = 0, mouseY = 0;
+            const repulsionRadius = 150; // Larger radius for spheres
+            const repulsionForce = 15;   // Stronger force
+
+            // Sphere properties
+            const sphereCount = 20; // Fewer, larger spheres
+            const sphereRadius = 20;
+            const spheresData = [];
+
+            function initThreeJS() {
+                // Scene
+                scene = new THREE.Scene();
+
+                // Camera
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / heroSection.offsetHeight, 0.1, 1000);
+                camera.position.z = 250; // Adjust camera to see spheres
+
+                // Renderer
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+                renderer.setSize(window.innerWidth, heroSection.offsetHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setClearColor(0x000000, 0); // Transparent background for canvas to show CSS gradient
+
+                // Lights
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                scene.add(ambientLight);
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(0, 1, 1).normalize();
+                scene.add(directionalLight);
+
+                // Spheres
+                const sphereGeometry = new THREE.SphereGeometry(sphereRadius, 32, 32);
+                const sphereMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xcacada, // Light gray color for spheres
+                    shininess: 30,
+                    specular: 0x505050,
+                });
+
+                for (let i = 0; i < sphereCount; i++) {
+                    const x = (Math.random() - 0.5) * 400; // Spread around center
+                    const y = (Math.random() - 0.5) * 300;
+                    const z = (Math.random() - 0.5) * 200;
+
+                    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                    sphere.position.set(x, y, z);
+                    scene.add(sphere);
+                    spheres.push(sphere);
+
+                    spheresData.push({
+                        velocity: new THREE.Vector3(),
+                        acceleration: new THREE.Vector3(),
+                        originalPosition: new THREE.Vector3(x, y, z),
+                    });
+                }
+
+                // Event Listeners for Three.js
+                window.addEventListener('resize', onWindowResize);
+                document.addEventListener('mousemove', onDocumentMouseMove);
+
+                animateThreeJS();
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / heroSection.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, heroSection.offsetHeight);
+            }
+
+            function onDocumentMouseMove(event) {
+                const rect = heroSection.getBoundingClientRect();
+                mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            }
+
+            function animateThreeJS() {
+                requestAnimationFrame(animateThreeJS);
+
+                for (let i = 0; i < sphereCount; i++) {
+                    const sphere = spheres[i];
+                    const sphereData = spheresData[i];
+                    const currentPos = sphere.position;
+
+                    if (mouseX !== 0 && mouseY !== 0) {
+                        const mouseVector = new THREE.Vector3(mouseX, mouseY, 0.5); 
+                        mouseVector.unproject(camera); 
+
+                        const directionFromCamera = new THREE.Vector3().subVectors(mouseVector, camera.position).normalize();
+                        const distanceToPlane = -camera.position.z / directionFromCamera.z;
+                        mouseVector.copy(camera.position).add(directionFromCamera.multiplyScalar(distanceToPlane));
+
+                        const distance = currentPos.distanceTo(mouseVector);
+
+                        if (distance < repulsionRadius) {
+                            const direction = new THREE.Vector3().subVectors(currentPos, mouseVector).normalize();
+                            const force = (repulsionForce / (distance / 10)) * 0.1; 
+                            sphereData.acceleration.add(direction.multiplyScalar(force));
+                        }
+                    }
+
+                    const returnDirection = new THREE.Vector3().subVectors(sphereData.originalPosition, currentPos);
+                    sphereData.acceleration.add(returnDirection.multiplyScalar(0.0005));
+
+                    sphereData.velocity.add(sphereData.acceleration);
+                    sphereData.velocity.multiplyScalar(0.95); 
+                    currentPos.add(sphereData.velocity);
+
+                    sphereData.acceleration.set(0, 0, 0);
+                }
+
+                renderer.render(scene, camera);
+            }
+
+            initThreeJS(); 
+
+            // Featured Projects Carousel Logic
+            const projects = [
+                {
+                    id: 1,
+                    image: "https://placehold.co/400x400/007bff/ffffff?text=EduSpace",
+                    category: "IoT, Web Development",
+                    title: "EduSpace: A Room Availability and Resource Management System",
+                    year: "2025",
+                    description: "EduSpace is an ongoing capstone project that demonstrates a real-time room availability and resource management system through IoT technology and automation. It integrates ESP32 camera modules for occupancy detection, cloud-based databases for data storage, and a web-based platform.",
+                    technologies: ["Html", "React", "Python", "IoT"],
+                    viewLink: "#",
+                    githubLink: "#"
+                },
+                {
+                    id: 2,
+                    image: "https://placehold.co/400x400/9b59b6/ffffff?text=Travary",
+                    category: "Mobile Application",
+                    title: "Travary Mobile Application",
+                    year: "2024",
+                    description: "A mobile application that lets users record their travel experiences and capture the essence of each moment through multimedia attachments, thorough notes, and automatic geolocation integration.",
+                    technologies: ["Java", "SQLite", "Android"],
+                    viewLink: "#",
+                    githubLink: "#"
+                },
+                {
+                    id: 3,
+                    image: "https://placehold.co/400x400/3498db/ffffff?text=Archers",
+                    category: "Web Application",
+                    title: "Archers Reservation Lab System",
+                    year: "2024",
+                    description: "A deployed web application that enables registered users to check lab availability, reserve slots, and manage their reservations securely.",
+                    technologies: ["Html", "CSS", "JavaScript", "MongoDB", "Node.js"],
+                    viewLink: "#",
+                    githubLink: "#"
+                }
+            ];
+
+            let currentProjectIndex = 0;
+            const projectImage = document.getElementById('project-image');
+            const projectCategory = document.getElementById('project-category');
+            const projectTitle = document.getElementById('project-title');
+            const projectYear = document.getElementById('project-year');
+            const projectDescription = document.getElementById('project-description');
+            const projectTechnologies = document.getElementById('project-technologies');
+            const projectViewLink = document.getElementById('project-view-link');
+            const projectGithubLink = document.getElementById('project-github-link');
+            const prevProjectBtn = document.getElementById('prevProjectBtn');
+            const nextProjectBtn = document.getElementById('nextProjectBtn');
+            const projectPagination = document.getElementById('project-pagination');
+            const projectDetailsContainer = document.getElementById('project-details-container');
+
+            function updateProjectContent() {
+                const project = projects[currentProjectIndex];
+                
+                // Add/remove active class for fade effect
+                projectDetailsContainer.classList.remove('active');
+                setTimeout(() => {
+                    projectImage.src = project.image;
+                    projectImage.alt = project.title;
+                    projectCategory.textContent = project.category;
+                    projectTitle.textContent = project.title;
+                    projectYear.textContent = project.year;
+                    projectDescription.textContent = project.description;
+                    projectViewLink.href = project.viewLink;
+                    projectGithubLink.href = project.githubLink;
+
+                    // Clear existing technologies and add new ones
+                    projectTechnologies.innerHTML = '';
+                    project.technologies.forEach(tech => {
+                        const span = document.createElement('span');
+                        span.className = 'bg-gray-200 text-gray-700 text-sm font-medium px-2 py-1 rounded-full';
+                        span.textContent = tech;
+                        projectTechnologies.appendChild(span);
+                    });
+                    projectDetailsContainer.classList.add('active'); // Add active class to show
+                }, 250); // Match this duration with the CSS transition
+            }
+
+            function updatePaginationDots() {
+                projectPagination.innerHTML = ''; // Clear existing dots
+                projects.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.className = `pagination-dot ${index === currentProjectIndex ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        currentProjectIndex = index;
+                        updateProjectContent();
+                        updatePaginationDots();
+                    });
+                    projectPagination.appendChild(dot);
+                });
+            }
+
+            nextProjectBtn.addEventListener('click', () => {
+                currentProjectIndex = (currentProjectIndex + 1) % projects.length;
+                updateProjectContent();
+                updatePaginationDots();
+            });
+
+            prevProjectBtn.addEventListener('click', () => {
+                currentProjectIndex = (currentProjectIndex - 1 + projects.length) % projects.length;
+                updateProjectContent();
+                updatePaginationDots();
+            });
+
+            // Initial load
+            updateProjectContent();
+            updatePaginationDots();
+        };
+    </script>
+</body>
+</html>

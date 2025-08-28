@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yuancarlos - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+        .hero-bg {
+            background-color: #0d47a1;
+            background-image: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.8)), url('https://placehold.co/1920x1080/0d47a1/ffffff?text=Background');
+            background-size: cover;
+            background-position: center;
+        }
+        .contact-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .input-field {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 100%;
+            transition: all 0.2s ease-in-out;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        .submit-btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .submit-btn:hover {
+            background-color: #1e40af;
+        }
+        .social-link {
+            transition: transform 0.2s ease-in-out;
+        }
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Modal specific styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden; /* Hidden by default */
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4a5568;
+        }
+        .close-btn:hover {
+            color: #2d3748;
+        }
+        
+        /* Loading overlay specific styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top of everything */
+            opacity: 0; /* Initially invisible */
+            pointer-events: none; /* Allows clicks through when invisible */
+            transition: opacity 0.3s ease-in-out; /* Smooth fade effect */
+        }
+        #loading-overlay.show {
+            opacity: 1; /* Fade in */
+            pointer-events: auto; /* Block clicks when visible */
+        }
+
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.3); /* Lighter border for contrast */
+            border-top-color: #3498db; /* Blue spinner */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+    <!-- Loading Overlay (consistent with homepage) -->
+    <div id="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="text-gray-900 bg-gray-100 sticky top-0 z-50 shadow-lg">
+        <nav class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <a href="homepage.html" class="text-xl font-bold tracking-widest uppercase nav-link">carlos.</a>
+            <div class="mt-4 sm:mt-0 flex space-x-6 sm:space-x-8 text-sm font-medium">
+                <a href="homepage.html" class="hover:text-gray-600 transition duration-300 ease-in-out nav-link">Home</a>
+                <a href="about.html" class="hover:text-gray-600 transition duration-300 ease-in-out nav-link">About</a>
+                <a href="projects.html" class="hover:text-gray-600 transition duration-300 ease-in-out nav-link">Projects</a>
+                <a href="contact.html" class="hover:text-gray-600 transition duration-300 ease-in-out nav-link">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content for Contact Page -->
+    <main class="container mx-auto px-4 py-16 md:py-24">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">Let's Make Things Work!</h1>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                Have a project idea or just want to say hello? I'd love to hear from you.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row justify-between items-start space-y-12 lg:space-y-0 lg:space-x-12">
+
+            <!-- Contact Information -->
+            <div class="lg:w-1/3 w-full contact-card p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Contact Info</h2>
+                <div class="mb-6">
+                    <h3 class="font-semibold text-lg text-gray-700">Phone Number</h3>
+                    <p class="text-gray-600">+63 9154162535</p>
+                </div>
+                <div class="mb-6">
+                    <h3 class="font-semibold text-lg text-gray-700">Email Address</h3>
+                    <p class="text-gray-600">yuanpatawaran@yahoo.com</p>
+                </div>
+                <div class="mt-8">
+                    <h3 class="font-semibold text-lg text-gray-700 mb-4">Connect with me</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/yuan.patawaran/" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                            <!-- Facebook Icon -->
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.873V15h-2.95v-3h2.95V9.75c0-2.905 1.76-4.5 4.363-4.5 1.258 0 2.37.094 2.69.136v2.922h-1.74c-1.37 0-1.638.65-1.638 1.61v2.162h3.256l-.504 3.003h-2.752v7.193C18.343 21.128 22 16.991 22 12z"></path></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/in/yuan-carlos-patawaran-bba9a12b3/" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                            <!-- LinkedIn Icon -->
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.769 0-.969.784-1.749 1.75-1.749s1.75.78 1.75 1.749c0 .979-.784 1.769-1.75 1.769zm13.5 12.268h-3v-5.604c0-3.368-4.01-3.113-4.01 0v5.604h-3v-11h3v1.765c1.396-2.586 7.01-2.61 7.01 2.928v6.307z"></path></svg>
+                        </a>
+                        <a href="https://www.instagram.com/yuancarloss/" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                            <!-- Instagram Icon -->
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm6.657 2.146c.928 0 1.688.76 1.688 1.688 0 .928-.76 1.688-1.688 1.688-.928 0-1.688-.76-1.688-1.688 0-.928.76-1.688 1.688-1.688zM12 7c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 2c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"></path></svg>
+                        </a>
+    
+                        <a href="https://github.com/yuancarlosss" class="social-link w-10 h-10 flex items-center justify-center bg-white bg-opacity-20 rounded-full hover:bg-opacity-40 transition-colors duration-300" target="_blank">
+                            <!-- GitHub Icon -->
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.167 6.83 9.488.5.09.682-.218.682-.483 0-.237-.009-.868-.014-1.7-2.782.605-3.37-1.34-3.37-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.007.07 1.531 1.032 1.531 1.032.892 1.528 2.341 1.087 2.91.832.09-.64.35-1.087.636-1.334-2.22-.251-4.555-1.11-4.555-4.943 0-1.09.39-1.984 1.029-2.675-.103-.252-.446-1.266.098-2.64c0 0 .84-.268 2.75 1.022A9.585 9.585 0 0112 6.814c.85.004 1.7.11 2.504.324 1.909-1.29 2.747-1.022 2.747-1.022.546 1.374.202 2.388.099 2.64.64.691 1.028 1.585 1.028 2.675 0 3.842-2.335 4.689-4.564 4.935.359.307.68.914.68 1.846 0 1.334-.012 2.41-.012 2.73 0 .265.18.577.688.484C19.137 20.163 22 16.416 22 12 22 6.477 17.523 2 12 2z" clip-rule="evenodd"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="lg:w-2/3 w-full contact-card p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Send Me a Message</h2>
+                <form id="contact-form" action="#" method="POST">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 font-medium mb-2">Your Name</label>
+                        <input type="text" id="name" name="name" class="input-field" placeholder="Name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700 font-medium mb-2">Your Email</label>
+                        <input type="email" id="email" name="email" class="input-field" placeholder="you@example.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" class="input-field" placeholder="Enter Subject" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="input-field" placeholder="Write your message here..." required></textarea>
+                    </div>
+                    <div class="text-center lg:text-left">
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal-btn">&times;</button>
+            <h2 class="text-3xl font-bold text-green-600 mb-4">Message Sent! 🎉</h2>
+            <p class="text-gray-700 mb-6">Thank you for reaching out! I've received your message and will get back to you as soon as possible.</p>
+            <button class="submit-btn" id="modal-ok-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 text-center">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2023 Dekha. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contact-form');
+            const successModal = document.getElementById('success-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalOkBtn = document.getElementById('modal-ok-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            // --- Loading Animation for Navigation Links (consistent with homepage) ---
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+                    loadingOverlay.classList.add('show'); // Use 'show' class
+
+                    const destination = this.href;
+                    setTimeout(() => {
+                        window.location.href = destination; 
+                    }, 500); 
+                });
+            });
+
+            window.addEventListener('pageshow', function(event) {
+                // Check if the page is loaded from cache (bfcache) or is a fresh load
+                if (event.persisted || !window.performance.getEntriesByType("navigation")[0].responseStart) { 
+                    loadingOverlay.classList.remove('show'); // Hide overlay
+                }
+            });
+
+            // --- Contact Form Submission Logic ---
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Simple client-side validation using 'required' attributes
+                if (form.checkValidity()) {
+                    // Simulate form submission delay
+                    loadingOverlay.classList.add('show'); // Show loading overlay
+
+                    setTimeout(() => {
+                        loadingOverlay.classList.remove('show'); // Hide loading overlay
+                        successModal.classList.add('show'); // Show the modal
+
+                        // Optional: Reset form fields after successful submission
+                        form.reset(); 
+                    }, 1500); // Simulate 1.5 seconds for sending message
+                } else {
+                    // If validation fails, the browser's default messages will appear.
+                    // For custom validation messages, you would handle this more robustly.
+                    console.log("Form validation failed. Please fill in all required fields.");
+                }
+            });
+
+            // --- Modal Close Logic ---
+            function closeSuccessModal() {
+                successModal.classList.remove('show');
+            }
+
+            closeModalBtn.addEventListener('click', closeSuccessModal);
+            modalOkBtn.addEventListener('click', closeSuccessModal);
+
+            // Close modal if clicking outside (on the overlay)
+            successModal.addEventListener('click', function(event) {
+                if (event.target === successModal) {
+                    closeSuccessModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
