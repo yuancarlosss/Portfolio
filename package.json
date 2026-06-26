@@ -20,6 +20,7 @@
   "homepage": "https://github.com/yuancarlosss/Portfolio#readme",
   "dependencies": {
     "mongodb": "^7.4.0",
-    "mongoose": "^8.24.1"
+    "mongoose": "^8.24.1",
+    "resend": "^6.16.0"
   }
 }
