@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
 
             from: "Portfolio Contact <onboarding@resend.dev>",
 
-            to: "yuanpatawaran@yahoo.com",
+            to: "yuan_patawaran@dlsu.edu.ph",
 
             replyTo: email,
 
