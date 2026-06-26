@@ -656,40 +656,54 @@
             <!-- Contact Form -->
             <div class="bg-white rounded-3xl shadow-2xl p-8">
 
-                <form>
+                <form id="contactForm">
 
                     <div class="grid md:grid-cols-2 gap-4">
 
                         <input
+                            id="firstName"
+                            name="firstName"
                             type="text"
                             placeholder="First Name"
+                            required
                             class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none">
 
-                        <input
+                            <input
+                            id="lastName"
+                            name="lastName"
                             type="text"
                             placeholder="Last Name"
+                            required
                             class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none">
 
                     </div>
 
                     <div class="mt-4">
                         <input
+                            id="email"
+                            name="email"
                             type="email"
                             placeholder="Email Address"
+                            required
                             class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none">
                     </div>
 
                     <div class="mt-4">
                         <input
-                            type="text"
-                            placeholder="Subject"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        id="subject"
+                        name="subject"
+                        type="text"
+                        placeholder="Subject"
+                        required
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none">
                     </div>
 
                     <div class="mt-4">
                         <textarea
+                            id="message"
+                            name="message"
                             rows="6"
-                            placeholder="Your Message..."
+                            required
                             class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
                     </div>
 
@@ -1127,6 +1141,8 @@
           revealOnScroll();
         };
         </script>
+
+        <script src="resources/js/contact.js"></script>
         
 </body>
 </html>
