@@ -1,7 +1,10 @@
 const form = document.getElementById("contactForm");
-const statusBox = document.getElementById("formStatus");
-const statusTitle = document.getElementById("statusTitle");
-const statusMessage = document.getElementById("statusMessage");
+
+const modal = document.getElementById("statusModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalMessage = document.getElementById("modalMessage");
+const closeModal = document.getElementById("closeModal");
+const modalButton = document.getElementById("modalButton");
 
 form.addEventListener("submit", async (e) => {
 
@@ -23,15 +26,11 @@ form.addEventListener("submit", async (e) => {
     try {
 
         const response = await fetch("/api/contact", {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify(data)
-
         });
 
         const result = await response.json();
@@ -39,41 +38,63 @@ form.addEventListener("submit", async (e) => {
         if (result.success) {
 
             form.reset();
-        
-            statusBox.classList.remove("hidden");
-        
-            statusTitle.textContent = " Message Sent!";
-            statusTitle.className = "text-lg font-bold text-purple-700";
-        
-            statusMessage.innerHTML =
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+
+            modalTitle.textContent = "🎉 Message Sent!";
+            modalMessage.innerHTML =
                 "Thank you for reaching out!<br><span class='text-sm text-gray-500'>I'll get back to you as soon as possible.</span>";
-        
+
         } else {
-        
-            statusBox.classList.remove("hidden");
-        
-            statusTitle.textContent = "Oops!";
-            statusTitle.className = "text-lg font-bold text-red-600";
-        
-            statusMessage.textContent = result.message;
-        
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+
+            modalTitle.textContent = "Oops!";
+            modalMessage.textContent = result.message;
+
         }
 
     } catch (err) {
 
         console.error(err);
-    
-        statusBox.classList.remove("hidden");
-    
-        statusTitle.textContent = "Oops!";
-        statusTitle.className = "text-lg font-bold text-red-600";
-    
-        statusMessage.textContent =
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+
+        modalTitle.textContent = "Oops!";
+        modalMessage.textContent =
             "Something went wrong. Please try again.";
-    
+
     }
 
     button.disabled = false;
     button.textContent = "Send Message";
+
+});
+
+closeModal.addEventListener("click", () => {
+
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+
+});
+
+modalButton.addEventListener("click", () => {
+
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+
+});
+
+modal.addEventListener("click", (e) => {
+
+    if (e.target === modal) {
+
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+
+    }
 
 });
