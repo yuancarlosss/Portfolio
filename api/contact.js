@@ -1,9 +1,9 @@
-const connectDB = require("../lib/mongodb");
-const Contact = require("../models/Contact");
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
 
-    // Only allow POST requests
     if (req.method !== "POST") {
         return res.status(405).json({
             success: false,
@@ -13,8 +13,6 @@ module.exports = async function handler(req, res) {
 
     try {
 
-        await connectDB();
-
         const {
             firstName,
             lastName,
@@ -23,7 +21,6 @@ module.exports = async function handler(req, res) {
             message
         } = req.body;
 
-        // Validate fields
         if (
             !firstName ||
             !lastName ||
@@ -37,29 +34,79 @@ module.exports = async function handler(req, res) {
             });
         }
 
-        // Save to MongoDB
-        await Contact.create({
-            firstName,
-            lastName,
-            email,
-            subject,
-            message
+        const { error } = await resend.emails.send({
+
+            from: "Portfolio Contact <onboarding@resend.dev>",
+
+            to: "yuanpatawaran@yahoo.com",
+
+            replyTo: email,
+
+            subject: `📩 ${subject}`,
+
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto;">
+
+                    <h2 style="color:#6D28D9;">
+                        📩 New Portfolio Contact
+                    </h2>
+
+                    <hr>
+
+                    <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+
+                    <p><strong>Email:</strong> ${email}</p>
+
+                    <p><strong>Subject:</strong> ${subject}</p>
+
+                    <h3>Message</h3>
+
+                    <p style="white-space: pre-line;">
+                        ${message}
+                    </p>
+
+                    <hr>
+
+                    <p style="font-size:12px;color:#777;">
+                        Sent from your Portfolio Website
+                    </p>
+
+                </div>
+            `
+
         });
+
+        if (error) {
+
+            console.error(error);
+
+            return res.status(500).json({
+                success: false,
+                message: "Failed to send email."
+            });
+
+        }
 
         return res.status(200).json({
+
             success: true,
-            message: "Your message has been sent successfully!"
+
+            message: "Thank you! Your message has been sent."
+
         });
 
-    } catch (error) {
+    } catch (err) {
 
-        console.error(error);
+        console.error(err);
 
         return res.status(500).json({
+
             success: false,
+
             message: "Something went wrong."
+
         });
 
     }
 
-}
+};
