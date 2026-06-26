@@ -1,4 +1,7 @@
 const form = document.getElementById("contactForm");
+const statusBox = document.getElementById("formStatus");
+const statusTitle = document.getElementById("statusTitle");
+const statusMessage = document.getElementById("statusMessage");
 
 form.addEventListener("submit", async (e) => {
 
@@ -35,22 +38,39 @@ form.addEventListener("submit", async (e) => {
 
         if (result.success) {
 
-            alert(result.message);
-
             form.reset();
-
+        
+            statusBox.classList.remove("hidden");
+        
+            statusTitle.textContent = " Message Sent!";
+            statusTitle.className = "text-lg font-bold text-purple-700";
+        
+            statusMessage.innerHTML =
+                "Thank you for reaching out!<br><span class='text-sm text-gray-500'>I'll get back to you as soon as possible.</span>";
+        
         } else {
-
-            alert(result.message);
-
+        
+            statusBox.classList.remove("hidden");
+        
+            statusTitle.textContent = "Oops!";
+            statusTitle.className = "text-lg font-bold text-red-600";
+        
+            statusMessage.textContent = result.message;
+        
         }
 
     } catch (err) {
 
         console.error(err);
-
-        alert("Failed to send message.");
-
+    
+        statusBox.classList.remove("hidden");
+    
+        statusTitle.textContent = "Oops!";
+        statusTitle.className = "text-lg font-bold text-red-600";
+    
+        statusMessage.textContent =
+            "Something went wrong. Please try again.";
+    
     }
 
     button.disabled = false;
